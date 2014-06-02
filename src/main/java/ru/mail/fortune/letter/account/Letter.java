@@ -22,8 +22,8 @@ public class Letter {
 	private String number;
 
 	@Column(name = "letterDate")
-	@DateTimeFormat(pattern = "dd-mm-yyyy")
-	private Date date;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date letterDate;
 
 	@Column(name = "theme")
 	private String theme;
@@ -56,12 +56,12 @@ public class Letter {
 		this.number = number;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getLetterDate() {
+		return letterDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setLetterDate(Date date) {
+		this.letterDate = date;
 	}
 
 	public String getTheme() {

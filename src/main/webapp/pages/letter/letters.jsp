@@ -3,6 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,6 +15,10 @@
 			<spring:message code="letter.number" />
 		</form:label>
 		<form:input path="number" />
+		<form:label path="letterDate">
+			<spring:message code="letter.letterDate" />
+		</form:label>
+		<form:input path="letterDate" type="date" />
 		<form:label path="theme">
 			<spring:message code="letter.theme" />
 		</form:label>
@@ -35,14 +40,19 @@
 			<th><spring:message code="letter.theme" /></th>
 			<th><spring:message code="letter.published" /></th>
 			<th><spring:message code="letter.note" /></th>
-
+			<th><spring:message code="letter.letterDate" /></th>
 		</tr>
-		<c:forEach items="${letters}" var="letter">
+		<c:set var="dateTimeDisplayFormat">
+			<spring:message code="letter.datePattern" />
+		</c:set>
+		<c:forEach items="${letters}" var="aLetter">
 			<tr>
-				<td>${letter.number}</td>
-				<td>${letter.theme}</td>
-				<td>${letter.published}</td>
-				<td>${letter.note}</td>
+				<td>${aLetter.number}</td>
+				<td>${aLetter.theme}</td>
+				<td>${aLetter.published}</td>
+				<td>${aLetter.note}</td>
+				<td><fmt:formatDate pattern="${dateTimeDisplayFormat}"
+						value="${aLetter.letterDate}" /></td>
 			</tr>
 		</c:forEach>
 	</table>
