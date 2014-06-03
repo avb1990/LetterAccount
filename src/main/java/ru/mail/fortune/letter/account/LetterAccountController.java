@@ -36,7 +36,8 @@ public class LetterAccountController {
 				new SimpleDateFormat("yyyy-MM-dd"), true));
 		binder.registerCustomEditor(byte[].class,
 				new ByteArrayMultipartFileEditor());
-		binder.setValidator(validator);
+		binder.setValidator(new PropertyValidatorWithFileTypeValidation(
+				validator));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/account")
