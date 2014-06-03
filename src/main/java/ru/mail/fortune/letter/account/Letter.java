@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -19,22 +22,30 @@ public class Letter {
 	private Integer id;
 
 	@Column(name = "number")
+	@NotEmpty
+	@Size(max = 20)
 	private String number;
 
 	@Column(name = "letterDate")
+	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date letterDate;
 
 	@Column(name = "theme")
+	@NotEmpty
+	@Size(max = 250)
 	private String theme;
 
 	@Column(name = "published")
 	private boolean published;
 
 	@Column(name = "file")
+	@NotNull
+	@Size(min = 1)
 	private byte[] file;
 
 	@Column(name = "fileType")
+	@NotNull
 	private String fileType;
 
 	@Column(name = "note")

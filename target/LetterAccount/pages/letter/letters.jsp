@@ -8,9 +8,12 @@
 <html>
 <head>
 <title><spring:message code="letter.title" /></title>
+<script type="text/javascript" src="./pages/letter/jquery.js"></script>
+<script type="text/javascript" src="./pages/letter/letters.js"></script>
 </head>
 <body>
-	<form:form method="post" action="addLetter" commandName="letter">
+	<form:form method="post" action="addLetter" commandName="letter"
+		enctype="multipart/form-data">
 		<form:label path="number">
 			<spring:message code="letter.number" />
 		</form:label>
@@ -31,6 +34,11 @@
 			<spring:message code="letter.note" />
 		</form:label>
 		<form:textarea cols="50" rows="20" path="note" />
+		<form:label path="file">
+			<spring:message code="letter.file" />
+		</form:label>
+		<form:input id="file" type="file" path="file" />
+		<form:hidden id="fileType" path="fileType" />
 		<input type="submit" value="<spring:message code="letter.addLetter"/>" />
 	</form:form>
 
@@ -41,15 +49,22 @@
 			<th><spring:message code="letter.published" /></th>
 			<th><spring:message code="letter.note" /></th>
 			<th><spring:message code="letter.letterDate" /></th>
+
 		</tr>
-		<c:forEach items="${letters}" var="letter">
+		<c:set var="dateTimeDisplayFormat">
+			<spring:message code="letter.datePattern" />
+		</c:set>
+		<c:set var="showFileUrlPattern" value="getFile?letterId=" />
+		<c:forEach items="${letters}" var="aLetter">
 			<tr>
-				<td>${letter.number}</td>
-				<td>${letter.theme}</td>
-				<td>${letter.published}</td>
-				<td>${letter.note}</td>
-				<td><fmt:formatDate pattern="letter.datePattern"
-						value="${letter.letterDate}" /></td>
+				<td>${aLetter.number}</td>
+				<td>${aLetter.theme}</td>
+				<td>${aLetter.published}</td>
+				<td>${aLetter.note}</td>
+				<td><fmt:formatDate pattern="${dateTimeDisplayFormat}"
+						value="${aLetter.letterDate}" /></td>
+				<c:set var="url" value="${showFileUrlPattern}${aLetter.id}" />
+				<td><a href="${url}"><spring:message code="letter.showFile" /></a></td>
 			</tr>
 		</c:forEach>
 	</table>
