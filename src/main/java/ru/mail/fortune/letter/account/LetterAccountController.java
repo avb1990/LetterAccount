@@ -42,7 +42,7 @@ public class LetterAccountController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/account")
 	public String getLetters(HttpServletRequest request, ModelMap model) {
-		model.put("letters", lettersService.getAllLetters());
+		model.put("letters", lettersService.getAllLettersWithoutFiles());
 		model.put("letter", new Letter());
 		return "letters";
 	}

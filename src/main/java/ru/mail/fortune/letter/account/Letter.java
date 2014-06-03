@@ -2,10 +2,12 @@ package ru.mail.fortune.letter.account;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -39,16 +41,12 @@ public class Letter {
 	@Column(name = "published")
 	private boolean published;
 
-	@Column(name = "file")
+	@OneToOne(mappedBy = "letter", cascade = CascadeType.ALL)
 	@NotNull
-	@Size(min = 1)
-	private byte[] file;
-
-	@Column(name = "fileType")
-	@NotNull
-	private String fileType;
+	private LetterFile letterFile = new LetterFile(this);
 
 	@Column(name = "note")
+	@Size(max = 1000)
 	private String note;
 
 	public Integer getId() {
@@ -92,19 +90,19 @@ public class Letter {
 	}
 
 	public byte[] getFile() {
-		return file;
+		return letterFile.getFile();
 	}
 
 	public void setFile(byte[] file) {
-		this.file = file;
+		letterFile.setFile(file);
 	}
 
 	public String getFileType() {
-		return fileType;
+		return letterFile.getFileType();
 	}
 
 	public void setFileType(String fileType) {
-		this.fileType = fileType;
+		letterFile.setFileType(fileType);
 	}
 
 	public String getNote() {
@@ -113,6 +111,14 @@ public class Letter {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public LetterFile getLetterFile() {
+		return letterFile;
+	}
+
+	public void setLetterFile(LetterFile letterFile) {
+		this.letterFile = letterFile;
 	}
 
 	public static String PDF_FILE_TYPE_NAME = ".pdf";

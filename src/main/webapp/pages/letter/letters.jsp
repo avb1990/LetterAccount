@@ -34,14 +34,13 @@
 			<spring:message code="letter.note" />
 		</form:label>
 		<form:textarea cols="50" rows="20" path="note" />
-		<form:label path="file">
+		<form:label path="letterFile.file">
 			<spring:message code="letter.file" />
 		</form:label>
-		<form:input id="file" type="file" path="file" />
-		<form:hidden id="fileType" path="fileType" />
+		<form:input id="file" type="file" path="letterFile.file" />
+		<form:hidden id="fileType" path="letterFile.fileType" />
 		<input type="submit" value="<spring:message code="letter.addLetter"/>" />
 	</form:form>
-
 	<table>
 		<tr>
 			<th><spring:message code="letter.number" /></th>
@@ -55,8 +54,10 @@
 			<spring:message code="letter.datePattern" />
 		</c:set>
 		<c:set var="showFileUrlPattern" value="getFile?letterId=" />
+
 		<c:forEach items="${letters}" var="aLetter">
 			<tr>
+
 				<td>${aLetter.number}</td>
 				<td>${aLetter.theme}</td>
 				<td>${aLetter.published}</td>

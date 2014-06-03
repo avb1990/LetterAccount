@@ -8,4 +8,6 @@ public interface LettersDAO {
 	public Letter getLetter(Integer id);
 
 	public List<Letter> getAllLetters();
+
+	public List<Letter> getAllLettersWithoutFiles();
 }

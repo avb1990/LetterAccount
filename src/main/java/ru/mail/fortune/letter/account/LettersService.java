@@ -8,4 +8,6 @@ public interface LettersService {
 	public List<Letter> getAllLetters();
 
 	public Letter getLetter(Integer id);
+
+	public List<Letter> getAllLettersWithoutFiles();
 }

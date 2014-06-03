@@ -28,4 +28,9 @@ public class LettersServiceImpl implements LettersService {
 		// TODO Auto-generated method stub
 		return lettersDao.getLetter(id);
 	}
+
+	@Transactional
+	public List<Letter> getAllLettersWithoutFiles() {
+		return lettersDao.getAllLettersWithoutFiles();
+	}
 }
