@@ -85,14 +85,33 @@
 						<spring:message code="letter.file" />
 					</button></td>
 
-				<td><form:input id="file" type="file" path="letterFile.file"
+				<td><form:input id="file" type="file" path="file"
 						style="visibility:hidden" /></td>
-				<td><form:errors path="file" /></td>
-				<td><form:errors path="fileType" /></td>
+				<td><spring:bind path="file">
+						<c:if test="${status.error}">
+							<c:choose>
+								<c:when test="${status.errorCode =='emptyFile'}">
+									<spring:message code="error.file.notNull" />
+								</c:when>
+							</c:choose>
+						</c:if>
+					</spring:bind> <spring:bind path="fileType">
+						<c:if test="${status.error}">
+							<br />
+							<c:choose>
+								<c:when test="${status.errorCode =='NotEmpty'}">
+									<spring:message code="error.fileType.notEmpty" />
+								</c:when>
+								<c:when test="${status.errorCode =='fileType'}">
+									<spring:message code="error.fileType.fileType" />
+								</c:when>
+							</c:choose>
+						</c:if>
+					</spring:bind></td>
 			</tr>
 			<form:hidden id="fileType" path="letterFile.fileType" />
 			<tr>
-				<td><input type="submit"
+				<td><input id=submit type="submit"
 					value="<spring:message code="letter.addLetter"/>" /></td>
 			</tr>
 

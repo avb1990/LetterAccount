@@ -5,8 +5,8 @@
 
 <hibernate-configuration>
 	<session-factory>
-		<mapping class="ru.mail.fortune.letter.account.Letter" />
-		<mapping class="ru.mail.fortune.letter.account.LetterFile" />
+		<mapping class="ru.mail.fortune.letter.Letter" />
+		<mapping class="ru.mail.fortune.letter.LetterFile" />
 	</session-factory>
 
 </hibernate-configuration>
