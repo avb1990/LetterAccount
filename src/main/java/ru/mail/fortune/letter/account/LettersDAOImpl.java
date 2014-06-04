@@ -51,4 +51,9 @@ public class LettersDAOImpl implements LettersDAO {
 		}
 		return letters;
 	}
+
+	public void updateLetter(Letter letter) {
+		getSession().update(letter);
+
+	}
 }

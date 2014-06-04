@@ -10,4 +10,6 @@ public interface LettersService {
 	public Letter getLetter(Integer id);
 
 	public List<Letter> getAllLettersWithoutFiles();
+
+	public void updateLetter(Letter letter);
 }

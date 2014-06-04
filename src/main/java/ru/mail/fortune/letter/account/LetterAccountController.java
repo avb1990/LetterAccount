@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,10 +60,10 @@ public class LetterAccountController {
 	public void getLetterFile(@RequestParam("letterId") Integer letterId,
 			HttpServletResponse response) {
 		if (letterId == null)
-			throw new NullPointerException("Id не может быть == null");
+			throw new NullPointerException();
 		Letter letter = lettersService.getLetter(letterId);
 		if (letter == null)
-			throw new NullPointerException("Невозможно найти приказ с таким id");
+			throw new NullPointerException();
 		try {
 			response.getOutputStream().write(letter.getFile());
 			response.flushBuffer();
@@ -75,6 +76,25 @@ public class LetterAccountController {
 		else if (letter.getFileType() == ".pdf")
 			response.setContentType("application/pdf");
 		else
-			throw new IllegalStateException("Файл неопределенного типа");
+			throw new IllegalStateException();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/publish")
+	public String publishLetter(@RequestParam("letterId") Integer letterId) {
+		if (letterId != null) {
+			Letter letter = lettersService.getLetter(letterId);
+			if (letter == null) {
+				throw new NullPointerException();
+			}
+			letter.setPublished(true);
+			lettersService.updateLetter(letter);
+		} else
+			throw new NullPointerException();
+		return "redirect:account";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleError() {
+		return "error";
 	}
 }

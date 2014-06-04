@@ -12,34 +12,54 @@
 <script type="text/javascript" src="./pages/letter/letters.js"></script>
 </head>
 <body>
+
 	<form:form method="post" action="addLetter" commandName="letter"
 		enctype="multipart/form-data">
-		<form:label path="number">
-			<spring:message code="letter.number" />
-		</form:label>
-		<form:input path="number" />
-		<form:label path="letterDate">
-			<spring:message code="letter.letterDate" />
-		</form:label>
-		<form:input path="letterDate" type="date" />
-		<form:label path="theme">
-			<spring:message code="letter.theme" />
-		</form:label>
-		<form:input path="theme" />
-		<form:label path="published">
-			<spring:message code="letter.published" />
-		</form:label>
-		<form:checkbox path="published" />
-		<form:label path="note">
-			<spring:message code="letter.note" />
-		</form:label>
-		<form:textarea cols="50" rows="20" path="note" />
-		<form:label path="letterFile.file">
-			<spring:message code="letter.file" />
-		</form:label>
-		<form:input id="file" type="file" path="letterFile.file" />
-		<form:hidden id="fileType" path="letterFile.fileType" />
-		<input type="submit" value="<spring:message code="letter.addLetter"/>" />
+		<table>
+			<tr>
+				<td><form:label path="number">
+						<spring:message code="letter.number" />
+					</form:label></td>
+				<td><form:input path="number" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="letterDate">
+						<spring:message code="letter.letterDate" />
+					</form:label></td>
+				<td><form:input path="letterDate" type="date" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="theme">
+						<spring:message code="letter.theme" />
+					</form:label></td>
+				<td><form:textarea cols="50" rows="5" path="theme" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="published">
+						<spring:message code="letter.published" />
+					</form:label>
+				<td><form:checkbox path="published" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="note">
+						<spring:message code="letter.note" />
+					</form:label></td>
+				<td><form:textarea cols="50" rows="20" path="note" /></td>
+			</tr>
+			<tr>
+				<td><button id="chooseFileButton">
+						<spring:message code="letter.file" />
+					</button></td>
+				<td><form:input id="file" type="file" path="letterFile.file"
+						style="visibility:hidden" /></td>
+			</tr>
+			<form:hidden id="fileType" path="letterFile.fileType" />
+			<tr>
+				<td><input type="submit"
+					value="<spring:message code="letter.addLetter"/>" /></td>
+			</tr>
+
+		</table>
 	</form:form>
 	<table>
 		<tr>
@@ -54,13 +74,21 @@
 			<spring:message code="letter.datePattern" />
 		</c:set>
 		<c:set var="showFileUrlPattern" value="getFile?letterId=" />
-
+		<c:set var="publishUrlPattern" value="publish?letterId=" />
 		<c:forEach items="${letters}" var="aLetter">
 			<tr>
 
 				<td>${aLetter.number}</td>
 				<td>${aLetter.theme}</td>
-				<td>${aLetter.published}</td>
+				<td><c:choose>
+						<c:when test="${aLetter.published}">
+							<spring:message code="letter.letterPublished" />
+						</c:when>
+						<c:otherwise>
+							<a href="${publishUrlPattern}${aLetter.id}"><spring:message
+									code="letter.letterPublish" /></a>
+						</c:otherwise>
+					</c:choose></td>
 				<td>${aLetter.note}</td>
 				<td><fmt:formatDate pattern="${dateTimeDisplayFormat}"
 						value="${aLetter.letterDate}" /></td>

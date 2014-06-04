@@ -10,4 +10,6 @@ public interface LettersDAO {
 	public List<Letter> getAllLetters();
 
 	public List<Letter> getAllLettersWithoutFiles();
+
+	public void updateLetter(Letter letter);
 }

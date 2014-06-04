@@ -22,4 +22,8 @@
 		<servlet-name>LetterAccountWeb</servlet-name>
 		<url-pattern>/getFile</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LetterAccountWeb</servlet-name>
+		<url-pattern>/publish</url-pattern>
+	</servlet-mapping>
 </web-app>

@@ -33,4 +33,10 @@ public class LettersServiceImpl implements LettersService {
 	public List<Letter> getAllLettersWithoutFiles() {
 		return lettersDao.getAllLettersWithoutFiles();
 	}
+
+	@Transactional
+	public void updateLetter(Letter letter) {
+		lettersDao.updateLetter(letter);
+
+	}
 }
