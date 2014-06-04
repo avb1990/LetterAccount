@@ -6,4 +6,7 @@ $(document).ready(function() {
 		if(index!==-1)		
 			$("#fileType").attr("value",fileName.substring(index,fileName.length));
 	});
+	$("#chooseFileButton").click(function(){
+		$("#file").click();
+	});
 });

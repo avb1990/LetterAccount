@@ -122,7 +122,7 @@ public class Letter {
 	}
 
 	public static String PDF_FILE_TYPE_NAME = ".pdf";
-	public static String JPEG_FILE_TYPE_NAME = ".jpeg";
+	public static String JPEG_FILE_TYPE_NAME = ".jpg";
 
 	public static boolean isCorrectType(String type) {
 		return PDF_FILE_TYPE_NAME.equals(type)

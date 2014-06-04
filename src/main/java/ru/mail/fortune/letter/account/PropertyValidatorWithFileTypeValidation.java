@@ -21,7 +21,9 @@ public class PropertyValidatorWithFileTypeValidation implements Validator {
 
 		Letter letter = (Letter) arg0;
 		if (!Letter.isCorrectType(letter.getFileType()))
-			arg1.reject("fileType", "Incorrect fileType");
+			arg1.rejectValue("fileType", "fileType", "Incorrect fileType");
+		if (letter.getFile() == null || letter.getFile().length == 0)
+			arg1.rejectValue("file", "emptyFile");
 
 	}
 }

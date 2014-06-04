@@ -10,6 +10,7 @@
 <title><spring:message code="letter.title" /></title>
 <script type="text/javascript" src="./pages/letter/jquery.js"></script>
 <script type="text/javascript" src="./pages/letter/letters.js"></script>
+<meta charset="utf-8">
 </head>
 <body>
 
@@ -21,18 +22,51 @@
 						<spring:message code="letter.number" />
 					</form:label></td>
 				<td><form:input path="number" /></td>
+				<spring:bind path="number">
+					<c:if test="${status.error}">
+						<td><c:choose>
+								<c:when test="${status.errorCode =='Size'}">
+									<spring:message code="error.number.size" />
+								</c:when>
+								<c:when test="${status.errorCode =='NotEmpty'}">
+									<spring:message code="error.number.notEmpty" />
+								</c:when>
+							</c:choose></td>
+					</c:if>
+				</spring:bind>
 			</tr>
 			<tr>
 				<td><form:label path="letterDate">
 						<spring:message code="letter.letterDate" />
 					</form:label></td>
 				<td><form:input path="letterDate" type="date" /></td>
+				<spring:bind path="letterDate">
+					<c:if test="${status.error}">
+						<td><c:choose>
+								<c:when test="${status.errorCode =='NotNull'}">
+									<spring:message code="error.letterDate.notNull" />
+								</c:when>
+							</c:choose></td>
+					</c:if>
+				</spring:bind>
 			</tr>
 			<tr>
 				<td><form:label path="theme">
 						<spring:message code="letter.theme" />
 					</form:label></td>
 				<td><form:textarea cols="50" rows="5" path="theme" /></td>
+				<spring:bind path="theme">
+					<c:if test="${status.error}">
+						<td><c:choose>
+								<c:when test="${status.errorCode =='Size'}">
+									<spring:message code="error.theme.size" />
+								</c:when>
+								<c:when test="${status.errorCode =='NotEmpty'}">
+									<spring:message code="error.theme.notEmpty" />
+								</c:when>
+							</c:choose></td>
+					</c:if>
+				</spring:bind>
 			</tr>
 			<tr>
 				<td><form:label path="published">
@@ -47,11 +81,14 @@
 				<td><form:textarea cols="50" rows="20" path="note" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="letterFile.file">
+				<td><button id="chooseFileButton" type="button">
 						<spring:message code="letter.file" />
-					</form:label></td>
-				<td><form:input id="file" type="file" path="letterFile.file" />
-				</td>
+					</button></td>
+
+				<td><form:input id="file" type="file" path="letterFile.file"
+						style="visibility:hidden" /></td>
+				<td><form:errors path="file" /></td>
+				<td><form:errors path="fileType" /></td>
 			</tr>
 			<form:hidden id="fileType" path="letterFile.fileType" />
 			<tr>
@@ -81,7 +118,7 @@
 				<td>${aLetter.number}</td>
 				<td>${aLetter.theme}</td>
 				<td><c:choose>
-						<c:when test="${aLetter.published}==true">
+						<c:when test="${aLetter.published}">
 							<spring:message code="letter.letterPublished" />
 						</c:when>
 						<c:otherwise>

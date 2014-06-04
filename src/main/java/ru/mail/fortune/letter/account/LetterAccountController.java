@@ -2,7 +2,10 @@ package ru.mail.fortune.letter.account;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +13,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -43,40 +50,57 @@ public class LetterAccountController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/account")
 	public String getLetters(HttpServletRequest request, ModelMap model) {
-		model.put("letters", lettersService.getAllLettersWithoutFiles());
-		model.put("letter", new Letter());
+
+		Letter letter = new Letter();
+		initAccountModel(model, letter);
 		return "letters";
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/addLetter")
-	public String addLetter(@Valid Letter letter, BindingResult bindingResult) {
-		if (!bindingResult.hasErrors())
-			lettersService.addLetter(letter);
+	private void initAccountModel(ModelMap model, Letter letter) {
+		List<Letter> letters = lettersService.getAllLettersWithoutFiles();
+		Collections.sort(letters, new Comparator<Letter>() {
+			public int compare(Letter arg0, Letter arg1) {
+				return arg1.getLetterDate().compareTo(arg0.getLetterDate());
+			}
+		});
+		model.put("letters", letters);
+		model.put("letter", letter);
+	}
 
-		return "redirect:account";
+	@RequestMapping(method = RequestMethod.POST, value = "/addLetter")
+	public String addLetter(@Valid Letter letter, BindingResult bindingResult,
+			ModelMap model) {
+		if (!bindingResult.hasErrors()) {
+			lettersService.addLetter(letter);
+			return "redirect:account";
+		}
+		initAccountModel(model, letter);
+		return "letters";
+
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getFile")
-	public void getLetterFile(@RequestParam("letterId") Integer letterId,
+	public ResponseEntity<byte[]> getLetterFile(
+			@RequestParam("letterId") Integer letterId,
 			HttpServletResponse response) {
+
 		if (letterId == null)
 			throw new NullPointerException();
 		Letter letter = lettersService.getLetter(letterId);
 		if (letter == null)
 			throw new NullPointerException();
-		try {
-			response.getOutputStream().write(letter.getFile());
-			response.flushBuffer();
-		} catch (IOException e) {
-
-			throw new RuntimeException(e);
-		}
-		if (letter.getFileType() == ".jpg")
-			response.setContentType("image/jpeg");
-		else if (letter.getFileType() == ".pdf")
-			response.setContentType("application/pdf");
-		else
-			throw new IllegalStateException();
+		HttpHeaders header = new HttpHeaders();
+		// if (Letter.JPEG_FILE_TYPE_NAME.equals(letter.getFileType()))
+		// header.setContentType(MediaType.parseMediaType("image/jpeg"));
+		// else if (Letter.PDF_FILE_TYPE_NAME.equals(letter.getFileType()))
+		// header.setContentType(MediaType.parseMediaType("application/pdf"));
+		// else
+		// throw new IllegalStateException();
+		header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		header.set("Content-Disposition", "attachment;filename=\"file"
+				+ letterId.toString() + letter.getFileType() + "\" ");
+		return new ResponseEntity<byte[]>(letter.getFile(), header,
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/publish")
@@ -94,7 +118,8 @@ public class LetterAccountController {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public String handleError() {
+	public String handleError(Exception e) {
+		e.printStackTrace();
 		return "error";
 	}
 }

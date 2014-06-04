@@ -38,7 +38,7 @@ public class LetterFile {
 	private String fileType;
 
 	@Column(name = "file")
-	@NotNull
+	@NotEmpty
 	@Size(min = 1, max = 134217728)
 	private byte[] file;
 
